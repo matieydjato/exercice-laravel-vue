@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
+  public bool $skipObserverRecalculation = false;
+
   protected $fillable = [
     'customer_name',
     'currency',

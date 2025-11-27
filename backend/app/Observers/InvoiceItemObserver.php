@@ -24,7 +24,11 @@ class InvoiceItemObserver
     $invoice = $item->invoice;
 
     // Ne recalculer que si la facture est éditable
-    if ($invoice && $invoice->isEditable()) {
+    if (
+      $invoice
+      && $invoice->isEditable()
+      && !$invoice->skipObserverRecalculation
+    ) {
       $invoice->recalculateTotals();
       $invoice->saveQuietly();
     }
