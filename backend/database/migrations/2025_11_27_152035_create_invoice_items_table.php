@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             $table->string('description');
             $table->unsignedInteger('quantity');
-            $table->decimal('unit_price', 12, 4);
+            $table->decimal('unit_price', 12, 2);
             $table->timestamps();
         });
     }

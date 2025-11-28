@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
+  // Indicateur pour ignorer le recalcul dans l'observateur
   public bool $skipObserverRecalculation = false;
 
   protected $fillable = [
@@ -67,33 +68,5 @@ class Invoice extends Model
 
     // Total final
     $this->total_due = $this->subtotal - $this->discount_amount;
-  }
-
-  /**
-   * Marquer la facture comme envoyée
-   */
-  public function markAsSent(): bool
-  {
-    if ($this->status !== 'draft') {
-      return false;
-    }
-
-    $this->status = 'sent';
-
-    return $this->save();
-  }
-
-  /**
-   * Marquer la facture comme payée
-   */
-  public function markAsPaid(): bool
-  {
-    if ($this->status === 'paid') {
-      return false;
-    }
-
-    $this->status = 'paid';
-
-    return $this->save();
   }
 }

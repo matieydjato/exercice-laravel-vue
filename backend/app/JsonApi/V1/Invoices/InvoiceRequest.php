@@ -19,7 +19,6 @@ class InvoiceRequest extends ResourceRequest
       'customerName' => ['required', 'string', 'max:255'],
       'currency' => ['sometimes', 'string', 'size:3'],
       'status' => ['sometimes', Rule::in(['draft', 'sent', 'paid'])],
-      'discountRate' => ['sometimes', 'numeric', 'min:0', 'max:100'],
       'issuedAt' => ['required', 'date'],
       'dueAt' => ['required', 'date'],
     ];

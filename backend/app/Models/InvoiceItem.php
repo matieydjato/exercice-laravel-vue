@@ -16,7 +16,7 @@ class InvoiceItem extends Model
 
   protected $casts = [
     'quantity' => 'integer',
-    'unit_price' => 'decimal:4',
+    'unit_price' => 'decimal:2',
   ];
 
   public function invoice(): BelongsTo
@@ -25,7 +25,7 @@ class InvoiceItem extends Model
   }
 
   // Calculer le total de la ligne
-  public function getLineTotalPrice(): float
+  public function getLineTotalPriceAttribute(): float
   {
     return $this->quantity * $this->unit_price;
   }

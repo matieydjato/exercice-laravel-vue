@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class InvoiceActionController extends Controller
 {
   /**
-   * Créer une facture (avec des articles)
+   * Créer une facture
    */
   public function storeWithItems(Request $request): JsonResponse
   {
@@ -132,50 +132,6 @@ class InvoiceActionController extends Controller
   }
 
   /**
-   * Marquer comme envoyée
-   */
-  public function markAsSent(Invoice $invoice): JsonResponse
-  {
-    if (!$invoice->markAsSent()) {
-      return response()->json([
-        'errors' => [
-          [
-            'status' => '422',
-            'title' => 'Unprocessable Entity',
-            'detail' => 'Invoice cannot be marked as sent',
-          ]
-        ]
-      ], 422);
-    }
-
-    $invoice->load('items');
-
-    return $this->formatInvoiceResponse($invoice);
-  }
-
-  /**
-   * Marquer comme payée
-   */
-  public function markAsPaid(Invoice $invoice): JsonResponse
-  {
-    if (!$invoice->markAsPaid()) {
-      return response()->json([
-        'errors' => [
-          [
-            'status' => '422',
-            'title' => 'Unprocessable Entity',
-            'detail' => 'Invoice cannot be marked as paid',
-          ]
-        ]
-      ], 422);
-    }
-
-    $invoice->load('items');
-    
-    return $this->formatInvoiceResponse($invoice);
-  }
-
-  /**
    * Formater la réponse au format JSON:API
    */
   private function formatInvoiceResponse(Invoice $invoice, int $status = 200): JsonResponse
@@ -193,8 +149,8 @@ class InvoiceActionController extends Controller
           'subtotal' => (float) $invoice->subtotal,
           'discountAmount' => (float) $invoice->discount_amount,
           'totalDue' => (float) $invoice->total_due,
-          'issuedAt' => $invoice->issued_at->format('Y-m-d'),
-          'dueAt' => $invoice->due_at->format('Y-m-d'),
+          'issuedAt' => $invoice->issued_at,
+          'dueAt' => $invoice->due_at,
           'createdAt' => $invoice->created_at->toIso8601String(),
           'updatedAt' => $invoice->updated_at->toIso8601String(),
         ],
@@ -217,7 +173,7 @@ class InvoiceActionController extends Controller
             'description' => $item->description,
             'quantity' => $item->quantity,
             'unitPrice' => (float) $item->unit_price,
-            'lineTotal' => (float) $item->line_total,
+            'lineTotalPrice' => (float) $item->line_total_price,
           ],
         ];
       })->toArray(),
